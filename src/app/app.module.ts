@@ -2,19 +2,20 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AddTutorialComponent } from './components/add-tutorial/add-tutorial.component';
-import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
-import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { CriteriaComponent } from './components/criteria/criteria.component';
+import {PrimaryComponent} from "./components/primary/primary.component";
+import {CompanyBusinessCardComponent} from "./components/company-business-card/company-business-card.component";
+import {SettingsComponent} from "./components/settings/settings/settings.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    AddTutorialComponent,
-    TutorialDetailsComponent,
-    TutorialsListComponent
+    CriteriaComponent,
+    CompanyBusinessCardComponent,
+    PrimaryComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
