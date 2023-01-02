@@ -12,11 +12,11 @@ export class PrimaryComponent implements OnInit {
 
   companyBusinessCards: Observable<CompanyBusinessCard[]>;
 
-  constructor(private companyService:CompanyService) {
+  constructor(private companyService: CompanyService) {
     this.companyBusinessCards = new Observable<CompanyBusinessCard[]>();
   }
 
   ngOnInit(): void {
     this.companyBusinessCards = this.companyService.getAll();
-    }
+  }
 }

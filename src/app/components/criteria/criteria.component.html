@@ -1,6 +1,6 @@
 <div>
-  <div class="submit-form">
-    <div class="setting mb-2">{{settings}}:</div>
+  <form [formGroup]="mainForm" class="submit-form">
+    <div class="setting mb-2">{{settings | capitaliseFirstLetter}}:</div>
     <div class="form-group">
       <div *ngFor="let field of fields">
         <label for={{field}}>{{field}}:</label>
@@ -9,10 +9,11 @@
           class="form-control"
           id="{{field}}"
           required
-          name=field
+          formControlName="{{field}}"
+          #field
         />
         <button (click)="set(field)" class="btn btn-success mt-2 mb-4">Submit</button>
       </div>
     </div>
-  </div>
+  </form>
 </div>

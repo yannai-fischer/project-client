@@ -3,7 +3,8 @@ import {Criteria} from "../../models/criteria.model";
 import {SettingsService} from "../../services/settings.service";
 import {Observable} from "rxjs";
 import {Settings} from "../../utils/settings.enum";
-import {ApiActions, Fields} from "../../utils/api-utils";
+import {ApiActions, ApiFields, Fields} from "../../utils/api-utils";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'criteria',
@@ -14,21 +15,26 @@ export class CriteriaComponent implements OnInit {
 
   @Input()
   settings: Settings = Settings.PLACEHOLDER;
-  criteria: Observable<Criteria>;
-  fields: Fields[];
+  fields: ApiFields[];
+  mainForm: FormGroup;
 
-  constructor(private settingsService: SettingsService) {
-    this.criteria = new Observable<Criteria>();
-    this.fields = Object.values(Fields);
+  constructor(private settingsService: SettingsService, private fb: FormBuilder) {
+    this.fields = Object.values(ApiFields);
+    this.mainForm = this.fb.group({
+      criteria: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
-    this.criteria = this.settingsService.getAll(ApiActions.GET_ALL, this.settings);
+    let x:{ [key: string]: FormControl } = {};
+    this.fields.forEach((field:string) => x[field] = new FormControl('', [Validators.required]));
+    this.fb.group(x);
+    this.settingsService.getAll(ApiActions.GET_ALL, this.settings).subscribe((criteria: Criteria) => {
+      this.mainForm.patchValue(criteria);
+    });
   }
 
-  set(field: Fields, value?: number): Observable<boolean> {
-    return this.settingsService.set(this.settings, field, value ?? -1);
+  set(field: ApiFields, value?: number) {
+    // return this.settingsService.set(this.settings, field, value ?? -1);
   }
-
-  //TODO: pipe for capital letter
 }
