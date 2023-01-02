@@ -1,5 +1,5 @@
 <div>
-  <company-business-card *ngFor="let businessCard in companyBusinessCards"
+  <company-business-card *ngFor="let businessCard of companyBusinessCards|async"
                          [businessCard]="businessCard">{{businessCard.name}}
   </company-business-card>
 </div>

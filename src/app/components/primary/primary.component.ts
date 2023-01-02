@@ -18,5 +18,5 @@ export class PrimaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.companyBusinessCards = this.companyService.getAll();
-  }
+    }
 }

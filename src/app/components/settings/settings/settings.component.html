@@ -1,3 +1,9 @@
 <div>
+  <div class="form-check m-4">
+    <input class="form-check-input" type="radio" name="isAdmin" id="isAdmin">
+    <label class="form-check-label" for="isAdmin">
+      Admin request:
+    </label>
+  </div>
   <criteria *ngFor="let item of settingsArray" class="form-group" [settings]="item">{{item}}</criteria>
 </div>

@@ -26,7 +26,9 @@ export class CriteriaComponent implements OnInit {
     this.criteria = this.settingsService.getAll(ApiActions.GET_ALL, this.settings);
   }
 
-  set(field: Fields, value: number): Observable<boolean> {
-    return this.settingsService.set(this.settings, field, value);
+  set(field: Fields, value?: number): Observable<boolean> {
+    return this.settingsService.set(this.settings, field, value ?? -1);
   }
+
+  //TODO: pipe for capital letter
 }

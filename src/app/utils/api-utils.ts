@@ -1,4 +1,4 @@
-export const SERVER_URL = 'http://localhost:8081/';
+export const SERVER_URL = 'http://localhost:8081';
 
 export enum Fields {
   AGE = `Age`,
@@ -8,7 +8,7 @@ export enum Fields {
 }
 
 export enum ApiActions {
-  CALCULATE = `calculateCompanyScoreById`,
+  CALCULATE = `calculate`,
   GET_ALL = `getAll`,
   SET = `set`
 }
