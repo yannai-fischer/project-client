@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Criteria} from "../models/criteria.model";
 import {Settings} from "../utils/settings.enum";
-import {ApiActions, ApiFields, Fields, FIELDS_TO_API_FIELDS, SERVER_URL} from "../utils/api-utils";
+import {ApiActions, ApiFields, SERVER_URL} from "../utils/api-utils";
 
 enum ApiSettings {
   DEFAULTS = `Defaults`,
