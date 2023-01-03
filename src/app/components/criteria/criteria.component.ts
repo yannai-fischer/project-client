@@ -1,10 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Criteria} from "../../models/criteria.model";
 import {SettingsService} from "../../services/settings.service";
-import {Observable} from "rxjs";
 import {Settings} from "../../utils/settings.enum";
-import {ApiActions, ApiFields, Fields} from "../../utils/api-utils";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {ApiActions, ApiFields} from "../../utils/api-utils";
+import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {Criteria} from "../../models/criteria.model";
+
+const CRITERIA: string = 'criteria';
 
 @Component({
   selector: 'criteria',
@@ -14,27 +15,41 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 export class CriteriaComponent implements OnInit {
 
   @Input()
-  settings: Settings = Settings.PLACEHOLDER;
+  settings: Settings;
+  @Input()
+  isAdmin: boolean;
   fields: ApiFields[];
   mainForm: FormGroup;
 
-  constructor(private settingsService: SettingsService, private fb: FormBuilder) {
+  constructor(private settingsService: SettingsService) {
+    this.settings = Settings.PLACEHOLDER;
+    this.isAdmin = false;
     this.fields = Object.values(ApiFields);
-    this.mainForm = this.fb.group({
-      criteria: ['', Validators.required],
+    this.mainForm = new FormGroup({
+      'criteria': new FormArray([])
     });
   }
 
-  ngOnInit(): void {
-    let x:{ [key: string]: FormControl } = {};
-    this.fields.forEach((field:string) => x[field] = new FormControl('', [Validators.required]));
-    this.fb.group(x);
-    this.settingsService.getAll(ApiActions.GET_ALL, this.settings).subscribe((criteria: Criteria) => {
-      this.mainForm.patchValue(criteria);
+  ngOnInit() {
+    this.fields = Object.values(ApiFields);
+    this.settingsService.getAll(ApiActions.GET_ALL, this.settings).subscribe((criteria: { [key: string]: Criteria }) => {
+      const fieldValuePairs: { [key: string]: FormControl }[] = this.fields.map(field => {
+        const fieldValuePair: { [key: string]: FormControl } = {};
+        fieldValuePair[field] = new FormControl(criteria[this.settings][field]);
+        return fieldValuePair;
+      });
+      for (let fieldValuePair of fieldValuePairs) {
+        (<FormArray>this.mainForm.get(CRITERIA)).push(new FormGroup(fieldValuePair));
+      }
     });
   }
 
-  set(field: ApiFields, value?: number) {
-    // return this.settingsService.set(this.settings, field, value ?? -1);
+  getControls() {
+    return (this.mainForm.get(CRITERIA) as FormArray).controls;
+  }
+
+  set(fieldValuePair: { [key: string]: number }): void {
+    const field: string = Object.getOwnPropertyNames(fieldValuePair)[0];
+    this.settingsService.set(this.settings, field as ApiFields, fieldValuePair[field] ?? 0, this.isAdmin).subscribe((response: boolean) => alert(response ? `Success!` : `Unauthorised action! Please contact an admin`));
   }
 }
