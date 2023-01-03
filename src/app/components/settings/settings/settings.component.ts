@@ -9,14 +9,18 @@ import {Settings} from "../../../utils/settings.enum";
 export class SettingsComponent implements OnInit {
 
   settingsArray: Settings[];
-  submitted: boolean;
+  isAdmin: boolean;
 
   constructor() {
     this.settingsArray = [Settings.PLACEHOLDER];
-    this.submitted = false;
+    this.isAdmin = false;
   }
 
   ngOnInit(): void {
     this.settingsArray = Object.values(Settings).splice(1);
+  }
+
+  toggleIsAdmin(){
+    this.isAdmin = !this.isAdmin;
   }
 }

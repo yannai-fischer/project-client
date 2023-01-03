@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Criteria} from "../models/criteria.model";
 import {Settings} from "../utils/settings.enum";
@@ -22,14 +22,19 @@ export class SettingsService {
   constructor(private http: HttpClient) {
   }
 
-  getAll(apiActions: ApiActions, settings: Settings): Observable<Criteria> {
-    return this.http.get<Criteria>(SettingsService.generateUrl(apiActions, settings));
+  getAll(apiActions: ApiActions, settings: Settings): Observable<{ [key: string]: Criteria }> {
+    return this.http.get<{ [key: string]: Criteria }>(SettingsService.generateUrl(apiActions, settings));
   }
 
-  set(setting: Settings, field: Fields, value: number): Observable<boolean> {
-    const fieldToApi: ApiFields = FIELDS_TO_API_FIELDS.get(field) as ApiFields;
-    const payload: { [key: string]: number } = {[fieldToApi]: value};
-    return this.http.post<boolean>(SettingsService.generateUrl(ApiActions.SET, setting), payload);
+  set(setting: Settings, apiField: ApiFields, value: number, isAdmin: boolean = false): Observable<boolean> {
+    const payload: {
+      field: ApiFields;
+      value: string;
+      isAdmin: string;
+    } = {field: apiField, value: '' + value, isAdmin: '' + isAdmin};
+    const params = new URLSearchParams(payload);
+    let x = SettingsService.generateUrl(ApiActions.SET, setting) + `?` + params.toString();
+    return this.http.post<boolean>(x, {});
   }
 
   private static generateUrl(apiActions: ApiActions, settings: Settings): string {

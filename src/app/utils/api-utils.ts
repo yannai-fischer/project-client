@@ -11,8 +11,7 @@ export enum ApiFields {
   AGE = `age`,
   FUNDING = `funding`,
   SIZE = `size`,
-  USER_SCORE = `userScore`,
-  PLACEHOLDER = ``
+  USER_SCORE = `userScore`
 }
 
 export const FIELDS_TO_API_FIELDS: Map<Fields, ApiFields> = new Map([
